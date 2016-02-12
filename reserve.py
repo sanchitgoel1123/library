@@ -69,6 +69,10 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 				newreserve = reserve(i,RollNo,time.strftime("%x"))
 				reservations.append(newreserve.__dict__) 
 				issued = True
+<<<<<<< HEAD
+				print reservations
+=======
+>>>>>>> dd117a9c025ec71702cc25ce611aa2a1a65e6f45
 				break
 
 		if(issued == True):
