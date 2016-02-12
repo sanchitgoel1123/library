@@ -20,7 +20,7 @@ class book(JSONEncodable):
 			def __iter__(self):
 				return iter(self._values)
 
-def load_file():
+def load_file_book():
 	w_list = []
 	try:
 		with open('book.json', 'r') as f:
@@ -33,14 +33,14 @@ def load_file():
 		print "End Of file Reached"
 	return w_list
 
-def write_file(w_list):
+def write_file_book(w_list):
 	try:
 		with open('book.json','wb') as f:
 			json.dump(w_list,f,default=methodcaller("json"))
 	except IOError:
 		print "IOError Generated"
 
-def add_book():
+def add_book(booklist):
 	isbn = raw_input("Enter ISBN: ")
 	title = raw_input("Enter Title Of the Book: ")
 	publisher = raw_input("Enter book publisher: ")	
@@ -50,8 +50,6 @@ def add_book():
 		tempauthor = raw_input("Enter Author:")
 		authors.append(tempauthor.upper())
 	edition = raw_input("Enter Edition of Book: " )
-	booklist = []
-	booklist = load_file()
 	count = 0 
 	for w in booklist:
 		if w['isbn'] == isbn.upper():
@@ -59,18 +57,17 @@ def add_book():
 	bookid = isbn + str(count) 
 	tempbook = book(isbn,title,authors,edition,publisher,bookid)
 	booklist.append(tempbook.__dict__)
-	write_file(booklist)
+	return booklist
 
-def get_bookids(title):
+def get_bookids(title,booklist):
 	bookIds = []
-	booklist = load_file()
 	for i in booklist:
 		if(i['title']==title.upper()):
 			bookIds.append(i['bookid'])
 	return bookIds 
 	
 
-def num_copies(title):
+def num_copies(title,booklist):
 	count = 0
 	for i in booklist:
 		if(i['title']==title.upper()):

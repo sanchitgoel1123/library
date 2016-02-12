@@ -40,14 +40,13 @@ def res_write_file(w_list):
 	except IOError:
 		print "IOError Generated write" 
 
-def issue_book():
+def issue_book(reservations,booklist):
 	RollNo = raw_input("Enter your RollNo: ")
 	Title = raw_input("Enter title of book you want to issue: ")
-	issue_bookhelp(RollNo,Title)
+	reservations = issue_bookhelp(RollNo,Title,reservations,booklist)
+	return reservations
 
-def issue_bookhelp(RollNo,Title):
-	reservations = []
-	reservations = res_load_file()
+def issue_bookhelp(RollNo,Title,reservations,booklist):
 	count = 0
 	for i in reservations:
 		if(i['RollNo'] == RollNo.upper() and i['status'] == True):
@@ -58,7 +57,7 @@ def issue_bookhelp(RollNo,Title):
 	else:
 		bookids = []
 		issued = False
-		bookids = book.get_bookids(Title)
+		bookids = book.get_bookids(Title,booklist)
 		for i in bookids:
 			currid = i
 			flag = True 
@@ -69,12 +68,12 @@ def issue_bookhelp(RollNo,Title):
 			if(flag == True):
 				newreserve = reserve(i,RollNo,time.strftime("%x"))
 				reservations.append(newreserve.__dict__) 
-				res_write_file(reservations)
 				issued = True
 				break
 
 		if(issued == True):
 			print "Book not available"
+	return reservations
 
 def return_book(RollNo,bookId):
 	pass 
