@@ -44,7 +44,6 @@ def issue_book(reservations,booklist):
 	RollNo = raw_input("Enter your RollNo: ")
 	Title = raw_input("Enter title of book you want to issue: ")
 	reservations = issue_bookhelp(RollNo,Title,reservations,booklist)
-	res_write_file(reservations)
 	return reservations
 
 def issue_bookhelp(RollNo,Title,reservations,booklist):
@@ -52,7 +51,7 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 	for i in reservations:
 		if(i['RollNo'] == RollNo.upper() and i['status'] == True):
 			count = count + 1
-
+	print count
 	if(count > 5):
 		print "Sorry ! A student can only issue 5 books at a time."
 		return -1
@@ -61,14 +60,13 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 		issued = False
 		bookids = book.get_bookids(Title,booklist)
 		for i in bookids:
-			currid = i
 			flag = True 
 			for j in reservations:
-				if(j['status'] == True):
+				if(j['status'] == True and j['bookId'] == i.upper()):
 					flag = False 
 
 			if(flag == True):
-				newreserve = reserve(i,RollNo,datetime.datetime.now())
+				newreserve = reserve(i.upper(),RollNo.upper(),str(datetime.datetime.now()))
 				issued = True
 				break
 
@@ -78,7 +76,8 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 	return newreserve
 
 def cal(dor,doi):
-	diff = int((dor-doi).total_seconds()) 
+	tempdoi = datetime.datetime.strptime(doi, "%Y-%m-%d %H:%M:%S.%f")
+	diff = int((dor-tempdoi).total_seconds()) 
 	diff = diff/86400
 	diff = diff - 14 
 	if(diff>0):
@@ -92,6 +91,8 @@ def return_book(reservations):
 		if(i['RollNo']==RollNo and i['bookId']==bookId):
 			if(i['status']==True):
 				i['status']=False
+				#print str(datetime.datetime.now().date())
+				#print i['DOI']
 				fine = cal(datetime.datetime.now(),i['DOI'])
 				print "Fine levied is " + str(fine)
 				return i 

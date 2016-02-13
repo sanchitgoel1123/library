@@ -62,11 +62,10 @@ def add_student(studentlist):
 		return tempstudent
 	return -1 
 
-def del_student(reservations):
-	rollno = raw_input("Enter RollNo of Student you wish to remove from Record: ")
+def del_student(reservations,rollno):
 	flag = 0
 	for i in reservations:
-		if(i['RollNo']==rollno and i['status']==True):
+		if(i['RollNo']==rollno.upper() and i['status']==True):
 			print "First return the books/fine. Contact Librarian"
 			flag = 1
 	return flag

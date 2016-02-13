@@ -1,7 +1,9 @@
 import student
+import sys
 import book 
 import reserve
-print "Welcome to Library Management System :\n"
+import shutil
+
 
 studentlist = []
 booklist = []
@@ -11,14 +13,18 @@ booklist = book.load_file_book()
 reservelist = reserve.res_load_file()
 
 while(True):
-	print "Enter an input:"
-	print "1.Add a student:"
-	print "2.Remove a student:"
-	print "3.Issue a book:"
-	print "4.Add a new book:"
-	print "5.Return a book"
-	print "6.Display all lists"
-	print "7.Exit"
+	#sys.stderr.write("\x1b[2J\x1b[H")
+	print "==========================Welcome to Library Management System :=================================\n"
+	print "\tEnter an input:\n"
+	print "\t1.Add a student:"
+	print "\t2.Remove a student:"
+	print "\t3.Issue a book:"
+	print "\t4.Add a new book:"
+	print "\t5.Return a book"
+	print "\t6.Display all lists"
+	print "\t10.Create a backup of current data"
+	print "\t11.Exit"
+	print "\t\t"
 	user_input = input()
 	if user_input==1:
 		testudent = student.add_student(studentlist) 
@@ -27,9 +33,13 @@ while(True):
 		else:
 			studentlist.append(testudent.__dict__)
 	elif user_input==2:
-		deleted = student.del_student(reservelist)
+		rollno = raw_input("Enter RollNo of Student you wish to remove from Record: ")
+		deleted = student.del_student(reservelist,rollno)
 		if(deleted==0):
 			#delete krde 
+			for i in studentlist:
+				if i['rollno'] == rollno.upper():
+					studentlist.remove(i) 
 		else:
 			pass
 	elif user_input==3:
@@ -49,7 +59,14 @@ while(True):
 		print studentlist
 		print booklist
 		print reservelist
-	elif user_input==7:
+	elif user_input==10:
+		student.write_file_student(studentlist)
+		book.write_file_book(booklist)
+		reserve.res_write_file(reservelist)
+		shutil.copy2('student.json','backupstudent.json')
+		shutil.copy2('book.json','backupbook.json')
+		shutil.copy2('res.json','backupres.json')
+	elif user_input==11:
 		student.write_file_student(studentlist)
 		book.write_file_book(booklist)
 		reserve.res_write_file(reservelist)
