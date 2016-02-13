@@ -16,18 +16,36 @@ while(True):
 	print "2.Remove a student:"
 	print "3.Issue a book:"
 	print "4.Add a new book:"
-	print "5.Display all lists"
+	print "5.Return a book"
+	print "6.Display all lists"
 	print "7.Exit"
 	user_input = input()
 	if user_input==1:
-		studentlist = student.add_student(studentlist) 
+		testudent = student.add_student(studentlist) 
+		if(testudent==-1):
+			pass
+		else:
+			studentlist.append(testudent.__dict__)
 	elif user_input==2:
-		studentlist = student.del_student(studentlist)
+		deleted = student.del_student(reservelist)
+		if(deleted==0):
+			#delete krde 
+		else:
+			pass
 	elif user_input==3:
-		reservelist = reserve.issue_book(reservelist,booklist)
+		newreserve = reserve.issue_book(reservelist,booklist)
+		if(newreserve==-1):
+			pass
+		else:
+			reservelist.append(newreserve.__dict__)
 	elif user_input==4:
-		booklist = book.add_book(booklist)
+		newbook = book.add_book(booklist)
+		booklist.append(newbook.__dict__)
 	elif user_input==5:
+		returned = reserve.return_book(reservelist)
+		if(returned==-1):
+			print "Enter valid information:"
+	elif user_input==6:
 		print studentlist
 		print booklist
 		print reservelist

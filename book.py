@@ -56,8 +56,7 @@ def add_book(booklist):
 			count = count + 1 ;
 	bookid = isbn + str(count) 
 	tempbook = book(isbn,title,authors,edition,publisher,bookid)
-	booklist.append(tempbook.__dict__)
-	return booklist
+	return tempbook 
 
 def get_bookids(title,booklist):
 	bookIds = []

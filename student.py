@@ -1,5 +1,6 @@
 import sys
 import json
+import reserve 
 from operator import methodcaller
 
 
@@ -16,8 +17,6 @@ class student(JSONEncodable):
 				self.branch = branch
 				self.semester = semester
 				self.phoneno = phoneno
-				self.bookissued = 0
-				self.totalfine = 0
 			def __iter__(self):
 				return iter(self._values)
 def load_file_student():
@@ -40,7 +39,7 @@ def write_file_student(w_list):
 	except IOError:
 		print "IOError Generated"
 
-def add_student(w_list):
+def add_student(studentlist):
 	flag = True
 	name = raw_input("Enter Name: ")
 	rollno = raw_input("Enter RollNo: ")
@@ -53,23 +52,21 @@ def add_student(w_list):
 	phoneno = raw_input("Enter Phoneno: ")
 	tempstudent = student(name.upper(), rollno.upper(), branch.upper(), semester, phoneno)
 	#traverse list of dictionaries of student
-	for w in w_list:
+	for w in studentlist:
 		if  w['rollno'] == tempstudent.rollno :
 			print "Student already exist "
 			flag = False
 			break
 	#append Student to List if no same rollno found
 	if flag == True:
-		w_list.append(tempstudent.__dict__)
-	return w_list
+		return tempstudent
+	return -1 
 
-def del_student(w_list):
+def del_student(reservations):
 	rollno = raw_input("Enter RollNo of Student you wish to remove from Record: ")
-	w_list = load_file_student()
-	for w in w_list:
-		if w['rollno'] == rollno.upper():
-			if w['totalfine'] != 0 or w['bookissued'] < 5:
-				print "Cannot Delete Student,Outstanding Issues,Contact Librarian"
-			else :
-				w_list.remove(w)
-	return w_list
+	flag = 0
+	for i in reservations:
+		if(i['RollNo']==rollno and i['status']==True):
+			print "First return the books/fine. Contact Librarian"
+			flag = 1
+	return flag

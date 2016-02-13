@@ -1,6 +1,6 @@
 import sys
 import json
-import time
+import datetime
 from operator import methodcaller
 
 import student
@@ -44,6 +44,7 @@ def issue_book(reservations,booklist):
 	RollNo = raw_input("Enter your RollNo: ")
 	Title = raw_input("Enter title of book you want to issue: ")
 	reservations = issue_bookhelp(RollNo,Title,reservations,booklist)
+	res_write_file(reservations)
 	return reservations
 
 def issue_bookhelp(RollNo,Title,reservations,booklist):
@@ -54,6 +55,7 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 
 	if(count > 5):
 		print "Sorry ! A student can only issue 5 books at a time."
+		return -1
 	else:
 		bookids = []
 		issued = False
@@ -66,17 +68,34 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 					flag = False 
 
 			if(flag == True):
-				newreserve = reserve(i,RollNo,time.strftime("%x"))
-				reservations.append(newreserve.__dict__) 
+				newreserve = reserve(i,RollNo,datetime.datetime.now())
 				issued = True
-				print reservations
 				break
 
-		if(issued == True):
+		if(issued == False):
 			print "Book not available"
-	return reservations
+			return -1
+	return newreserve
 
-def return_book(RollNo,bookId):
-	pass 
+def cal(dor,doi):
+	diff = int((dor-doi).total_seconds()) 
+	diff = diff/86400
+	diff = diff - 14 
+	if(diff>0):
+		return diff
+	return 0
+
+def return_book(reservations):
+	RollNo = raw_input("Enter your RollNo: ")
+	bookId = raw_input("Enter your bookId: ")
+	for i in reservations:
+		if(i['RollNo']==RollNo and i['bookId']==bookId):
+			if(i['status']==True):
+				i['status']=False
+				fine = cal(datetime.datetime.now(),i['DOI'])
+				print "Fine levied is " + str(fine)
+				return i 
+				break
+	return -1
 
 
