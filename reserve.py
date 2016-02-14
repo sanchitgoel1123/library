@@ -75,6 +75,41 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 			return -1
 	return newreserve
 
+def tissue_book(reservations,booklist):
+	tid = raw_input("Enter your Teacher Id: ")
+	Title = raw_input("Enter title of book you want to issue: ")
+	reservations = tissue_bookhelp(tid,Title,reservations,booklist)
+	return reservations
+
+def tissue_bookhelp(RollNo,Title,reservations,booklist):
+	count = 0
+	for i in reservations:
+		if(i['RollNo'] == RollNo.upper() and i['status'] == True):
+			count = count + 1
+	print count
+	if(count > 7):
+		print "Sorry ! A teacher can only issue 7 books at a time."
+		return -1
+	else:
+		bookids = []
+		issued = False
+		bookids = book.get_bookids(Title,booklist)
+		for i in bookids:
+			flag = True 
+			for j in reservations:
+				if(j['status'] == True and j['bookId'] == i.upper()):
+					flag = False 
+
+			if(flag == True):
+				newreserve = reserve(i.upper(),RollNo.upper(),str(datetime.datetime.now()))
+				issued = True
+				break
+
+		if(issued == False):
+			print "Book not available"
+			return -1
+	return newreserve
+
 def cal(dor,doi):
 	tempdoi = datetime.datetime.strptime(doi, "%Y-%m-%d %H:%M:%S.%f")
 	diff = int((dor-tempdoi).total_seconds()) 
@@ -88,7 +123,7 @@ def return_book(reservations):
 	RollNo = raw_input("Enter your RollNo: ")
 	bookId = raw_input("Enter your bookId: ")
 	for i in reservations:
-		if(i['RollNo']==RollNo and i['bookId']==bookId):
+		if(i['RollNo']==RollNo.upper() and i['bookId']==bookId.upper()):
 			if(i['status']==True):
 				i['status']=False
 				#print str(datetime.datetime.now().date())
@@ -99,4 +134,18 @@ def return_book(reservations):
 				break
 	return -1
 
+def treturn_book(reservations):
+	RollNo = raw_input("Enter your Teacher Id: ")
+	bookId = raw_input("Enter your bookId: ")
+	for i in reservations:
+		if(i['RollNo']==RollNo and i['bookId']==bookId):
+			if(i['status']==True):
+				i['status']=False
+				#print str(datetime.datetime.now().date())
+				#print i['DOI']
+				fine = cal(datetime.datetime.now(),i['DOI'])
+				print "Fine levied is " + str(fine)
+				return i 
+				break
+	return -1
 

@@ -42,7 +42,7 @@ def add_teacher(teacherlist):
 	name = raw_input("Enter Name: ")
 	tid = raw_input("Enter teacher Id: ")
 	phoneno = raw_input("Enter Phoneno: ")
-	tempteacher = teacher(name.upper(), tid ,phoneno)
+	tempteacher = teacher(name.upper(), tid.upper() ,phoneno)
 	#traverse list of dictionaries of teacher
 	for w in teacherlist:
 		if  w['tid'] == tempteacher.tid :
