@@ -43,13 +43,26 @@ def add_student(studentlist):
 	flag = True
 	name = raw_input("Enter Name: ")
 	rollno = raw_input("Enter RollNo: ")
+	branches = ["COE","IT","ECE","ICE","MPAE"]
 	branch = raw_input("Enter Branch: ")
+	bf = 0
+	while(bf!=1):
+		for i in branches:
+			if(i==branch.upper()):
+				bf=1
+		if(bf==0):
+			branch = raw_input("Invalid Branch.Enter Again:")
 	semester = raw_input("Enter Semester: ")
 	while (int(semester) > 8 or int(semester) < 1):
 		print "Incorrect Semester.Enter Again"
-		print semester
 		semester = raw_input("Enter Semester: ")
 	phoneno = raw_input("Enter Phoneno: ")
+	while(len(phoneno)!=10):
+		print "Incorrect length.Enter a 10 digit number :"
+		semester = raw_input("Enter Phoneno: ")
+	
+
+
 	tempstudent = student(name.upper(), rollno.upper(), branch.upper(), semester, phoneno)
 	#traverse list of dictionaries of student
 	for w in studentlist:

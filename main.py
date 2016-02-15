@@ -6,7 +6,8 @@ import shutil
 import teacher
 import displayissued
 import getpass
-
+import time
+import view_books_students
 
 studentlist = []
 booklist = []
@@ -18,7 +19,7 @@ booklist = book.load_file_book()
 reservelist = reserve.res_load_file()
 
 while(True):
-	#sys.stderr.write("\x1b[2J\x1b[H")
+	sys.stderr.write("\x1b[2J\x1b[H")
 	print "==========================Welcome to Library Management System=================================\n"
 	print "\tEnter an input:\n"
 	print "\t1.Add a student:"
@@ -32,7 +33,8 @@ while(True):
 	print "\t9.Return a book - teacher"
 	print "\t10.Search all Books"
 	print "\t11.Create a backup of current data"
-	print "\t12.Exit"
+	print "\t12.Display students"
+	print "\t13.Exit"
 	print "\t\t"
 	user_input = input()
 	if user_input==1:
@@ -65,10 +67,10 @@ while(True):
 		if(returned==-1):
 			print "Enter valid information:"
 	elif user_input==6:
-		print studentlist
-		print booklist
-		print reservelist
-		print teacherlist
+		#print studentlist
+		#print booklist
+		#print reservelist
+		#print teacherlist
 		user_type = raw_input("Are You ADMIN or STUDENT? : ")
 		if user_type.upper() == "STUDENT":
 			rollno = raw_input("Enter your Rollno: ")
@@ -78,17 +80,27 @@ while(True):
 			for j in issued:
 				for i in booklist:
 					if i['bookid'] == j['bookid']:
-						print "\tDate of Issue is%s.Remeber a Book is only Valid 14 Days from DOI"%j['DOI']
-						print "\tTitle of book is %s \n \tPublisher is %s \n \tEdition is %s\n\tBookID code is %s\t"%(i['title'],i['publisher'],i['edition'],i['bookid'])
-						print "\tAuthors are:   ",
-						for authors in i['authors']:
-							print "%s\n\t\t\t"%authors,
+						print "\tDate:\t\t%s . Remeber a Book is only Valid 14 Days from DOI"%j['DOI']
+						print "\tName:   \t"+i['title']
+						print "\tISBN:   \t"+i['isbn']
+						print "\tPub:    \t"+i['publisher']
+						print "\tBookId: \t"+i['bookid']
+						s = ""
+						for k in i['authors']:
+							s = s + k
+							s = s + "  -  "
+						print "\tAuthors:\t"+s
+						print "\n"
 		elif user_type.upper() == "ADMIN":
 			password = getpass.getpass()
 			if password.upper() == "PASSWORD":
+				print "\n"
 				for i in reservelist:
 					if i['status'] == True:
-						print "\tIssued on %s,Issued by %s,Bookid issued is %s"%(i['DOI'],i['RollNo'],i['bookId'])
+						print "\tDOI:   \t\t"+i['DOI']
+						print "\tRollNo:   \t"+i['RollNo']
+						print "\tBookID:    \t"+i['bookId']
+						print "\n"
 			else:
 				print "Incorrect Password"
 
@@ -115,6 +127,7 @@ while(True):
 		print "\t2.ISBN"
 		print "\t3.Author"
 		print "\t4.Publisher"
+		print "\t5.View all books"
 		search_input = input()
 		if search_input==1:
 			flag = 0
@@ -122,10 +135,15 @@ while(True):
 			for i in booklist:
 				if i['title'] == title.upper():
 					flag = 1
-					print "\n\n\tTitle of book is %s \n \tPublisher is %s \n \tEdition is %s\n\tBookID code is %s\t"%(i['title'],i['publisher'],i['edition'],i['bookid'])
-					print "\tAuthors are:   ",
-					for authors in i['authors']:
-						print "%s\n\t\t\t"%authors,
+					print "\tName:   \t"+i['title']
+					print "\tISBN:   \t"+i['isbn']
+					print "\tPub:    \t"+i['publisher']
+					print "\tBookId: \t"+i['bookid']
+					s = ""
+					for j in i['authors']:
+						s = s + j
+						s = s + "  -  "
+					print "\tAuthors:\t"+s
 					print "\n"
 			if flag == 0:
 				print "\nNo Such Book Found.\n"
@@ -135,10 +153,15 @@ while(True):
 			for i in booklist:
 				if i['isbn'] == isbn.upper():
 					flag = 1
-					print "\n\tTitle of book is %s \n \tPublisher is %s \n \tEdition is %s\n\tBookID code is %s\t"%(i['title'],i['publisher'],i['edition'],i['bookid'])
-					print "\tAuthors are:   ",
-					for authors in i['authors']:
-						print "%s\n\t\t\t"%authors,
+					print "\tName:   \t"+i['title']
+					print "\tISBN:   \t"+i['isbn']
+					print "\tPub:    \t"+i['publisher']
+					print "\tBookId: \t"+i['bookid']
+					s = ""
+					for j in i['authors']:
+						s = s + j
+						s = s + "  -  "
+					print "\tAuthors:\t"+s
 					print "\n"
 			if flag == 0:
 				print "\nNo Such Book Found.\n"
@@ -149,10 +172,16 @@ while(True):
 				for authors in i['authors']:
 					if authors == search_authors.upper():
 						flag = 1
-						print "\n\tTitle of book is %s \n \tPublisher is %s \n \tEdition is %s\n\tBookID code is %s\t"%(i['title'],i['publisher'],i['edition'],i['bookid'])
-						print "\tAuthors are:   ",
-						for authors in i['authors']:
-							print "%s\n\t\t\t"%authors,
+						print "\tName:   \t"+i['title']
+						print "\tISBN:   \t"+i['isbn']
+						print "\tPub:    \t"+i['publisher']
+						print "\tBookId: \t"+i['bookid']
+						s = ""
+						for j in i['authors']:
+							s = s + j
+							s = s + "  -  "
+						print "\tAuthors:\t"+s
+						print "\n"
 			if flag == 0:
 				print "\nNo Such Book Found.\n"		
 		elif search_input==4:
@@ -161,13 +190,20 @@ while(True):
 			for i in booklist:
 				if i['publisher'] == publisher.upper():
 					flag = 1
-					print "\n\n\tTitle of book is %s \n \tPublisher is %s \n \tEdition is %s\n\tBookID code is %s\t"%(i['title'],i['publisher'],i['edition'],i['bookid'])
-					print "\tAuthors are:   ",
-					for authors in i['authors']:
-						print "%s\n\t\t\t"%authors,
+					print "\tName:   \t"+i['title']
+					print "\tISBN:   \t"+i['isbn']
+					print "\tPub:    \t"+i['publisher']
+					print "\tBookId: \t"+i['bookid']
+					s = ""
+					for j in i['authors']:
+						s = s + j
+						s = s + "  -  "
+					print "\tAuthors:\t"+s
 					print "\n"
 			if flag == 0:
 				print "\nNo Such Book Found.\n"
+		elif search_input==5:
+			view_books_students.printbooks(booklist)
 
 	elif user_input==11:
 		student.write_file_student(studentlist)
@@ -179,10 +215,13 @@ while(True):
 		shutil.copy2('book.json','backupbook.json')
 		shutil.copy2('res.json','backupres.json')
 	elif user_input==12:
+		view_books_students.printstudents(studentlist)
+	elif user_input==13:
 		student.write_file_student(studentlist)
 		book.write_file_book(booklist)
 		reserve.res_write_file(reservelist)
 		teacher.write_file_teacher(teacherlist)
 		break
-	
 
+	raw_input("Press Enter to continue")
+	

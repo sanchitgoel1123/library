@@ -42,6 +42,9 @@ def write_file_book(w_list):
 
 def add_book(booklist):
 	isbn = raw_input("Enter ISBN: ")
+	while(len(isbn)!=10 and len(isbn)!=13):
+		print "Invalid ISBN.Enter a valid 10-digit or 13-digit ISBN number"
+		isbn = raw_input()
 	title = raw_input("Enter Title Of the Book: ")
 	publisher = raw_input("Enter book publisher: ")	
 	authors = []
@@ -49,7 +52,9 @@ def add_book(booklist):
 	for i in range(0,int(author_count)):
 		tempauthor = raw_input("Enter Author:")
 		authors.append(tempauthor.upper())
-	edition = raw_input("Enter Edition of Book: " )
+	edition = input("Enter Edition of Book: " )
+	while(int(edition)<1 or int(edition)>100):
+		edition = input("Invalid Edition. Enter a valid edition: ")
 	count = 0 
 	for w in booklist:
 		if w['isbn'] == isbn.upper():

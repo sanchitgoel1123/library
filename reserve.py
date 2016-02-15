@@ -51,8 +51,7 @@ def issue_bookhelp(RollNo,Title,reservations,booklist):
 	for i in reservations:
 		if(i['RollNo'] == RollNo.upper() and i['status'] == True):
 			count = count + 1
-	print count
-	if(count > 5):
+	if(count > 4):
 		print "Sorry ! A student can only issue 5 books at a time."
 		return -1
 	else:
